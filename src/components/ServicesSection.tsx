@@ -68,42 +68,42 @@ const services = [
   {
     icon: "https://cdn-icons-png.flaticon.com/512/1006/1006771.png",
     title: "Website Development",
-    desc: "Fast, SEO-optimized websites built for performance and scalability.",
+    desc: "We build websites that load fast, rank well and convert visitors into customers. Whether that means a custom-coded platform, a WordPress site or a Shopify store, every build is designed around your business goals, not a template. Speed, structure and search visibility are built in from day one.",
   },
   {
     icon: "https://cdn-icons-png.flaticon.com/512/2956/2956744.png",
-    title: "SEO & AEO",
-    desc: "Improve rankings on Google and AI-driven search platforms.",
+    title: "SEO, AEO & GEO",
+    desc: "Search is no longer just Google. We optimise your brand for traditional search, AI answer engines and generative search results, so you show up wherever your customers are looking. Technical SEO, structured content and ongoing optimisation keep you visible as search itself evolves.",
   },
   {
     icon: "https://cdn-icons-png.flaticon.com/512/8637/8637099.png",
     title: "AI-Powered Tools & Applications",
-    desc: "Custom AI tools, automation, and intelligent workflows.",
+    desc: "We turn AI ideas into working products. From internal tools that save your team hours to customer-facing applications, we build with secure integrations, clean data handling and dashboards that show real impact, not just a demo that looks good once.",
   },
   {
     icon: "https://cdn-icons-png.flaticon.com/512/3135/3135706.png",
     title: "Lead Generation & Conversion",
-    desc: "High-converting funnels that turn traffic into qualified leads.",
+    desc: "Traffic without conversion is wasted spend. We build landing pages, forms and follow-up systems designed to turn visitors into qualified leads. Every funnel is tested and refined against real numbers, so your cost per lead keeps dropping while quality goes up.",
   },
   {
     icon: "https://cdn-icons-png.flaticon.com/512/733/733547.png",
     title: "Social Media Marketing",
-    desc: "Grow engagement and audience with consistent content strategies.",
+    desc: "We manage social media like a growth channel, not a checklist. Strategy, content and community management work together to build an audience that actually engages with your brand, not one that just scrolls past it. Consistency and creativity drive every post.",
   },
   {
     icon: "https://cdn-icons-png.flaticon.com/512/4697/4697143.png",
     title: "Content Creation & Strategy",
-    desc: "SEO-focused content that drives traffic and builds authority.",
+    desc: "Good content starts with what your audience is searching for, not what is easy to write. We plan and create blog posts, campaigns and website copy built around real search intent and genuine business goals, so every piece works toward a result.",
   },
   {
     icon: "https://cdn-icons-png.flaticon.com/512/3281/3281289.png",
     title: "Brand Identity & Design",
-    desc: "Strategic branding that builds trust and lasting recognition.",
+    desc: "Your brand is more than a logo. We build complete visual identities, from logo and colour systems to tone of voice, so your business looks consistent and credible everywhere it shows up. A strong identity is what makes people remember you.",
   },
   {
     icon: "https://cdn-icons-png.flaticon.com/512/2920/2920277.png",
     title: "Performance Marketing",
-    desc: "Data-driven ad campaigns focused on ROI and conversions.",
+    desc: "We run paid campaigns on Google, Meta and LinkedIn built around results you can measure, not impressions that look nice in a report. Creative, targeting and budget are optimised continuously, so every rupee spent works toward qualified leads.",
   },
 ];
 

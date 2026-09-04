@@ -83,9 +83,6 @@ const ContactPage = () => {
         <section className="pt-36 pb-12 md:pt-44 md:pb-16 section-container px-6 md:px-10">
           <div className="max-w-[1080px] mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/60 backdrop-blur-md text-xs font-medium mb-8">
-              <Sparkles size={13} className="text-primary" />
-              <span>Let's collaborate</span>
-              <span className="text-muted-foreground">•</span>
               <span className="text-muted-foreground">Response within 3–4 hours</span>
             </div>
 
@@ -286,10 +283,10 @@ const ContactPage = () => {
                       <div>
                         <p className="text-xs text-muted-foreground font-medium">Call / WhatsApp</p>
                         <a
-                          href="tel:+918108969630"
+                          href="tel:+918928984774"
                           className="font-medium hover:underline text-foreground"
                         >
-                          +91 81089 69630
+                          +91-8928984774
                         </a>
                       </div>
                     </div>

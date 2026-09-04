@@ -120,8 +120,8 @@ const CTAFooter = () => (
             </a>
 
             {/* PHONE */}
-            <a href="tel:+918108969630" className="flex items-center gap-2 hover:text-white transition">
-              <Phone size={16} /> +91 81089 69630
+            <a href="tel:+918928984774" className="flex items-center gap-2 hover:text-white transition">
+              <Phone size={16} /> +91-8928984774
             </a>
             
 
@@ -129,8 +129,8 @@ const CTAFooter = () => (
             <div className="flex items-start gap-2">
               <MapPin size={16} className="mt-0.5 shrink-0" />
               <span>
-                23, 2nd Floor, Sharda Bhavan, Opposite Gala Provision Store,
-                Fatak Road / Narayan Joshi Road, Kandivali West, Mumbai – 400067
+                23, 2nd Floor, Sharda Bhavan, Opposite Gala Provision Store, 
+                Fatak Road / Narayan Joshi Road, Kandivali West, Mumbai – 400067, Maharashtra, India
               </span>
             </div>
 

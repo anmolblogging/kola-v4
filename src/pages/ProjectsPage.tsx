@@ -493,9 +493,10 @@ const FaqAccordion = memo(({ items }: { items: FaqItem[] }) => {
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
                 className="overflow-hidden">
-                <p className="pb-4 pr-8 text-[13px] text-black/45 leading-[1.8] tracking-[-0.005em]">
-                  {item.answer}
-                </p>
+                <div
+                  className="pb-4 pr-8 text-[13px] text-black/45 leading-[1.8] tracking-[-0.005em] [&>p]:mb-2 last:[&>p]:mb-0"
+                  dangerouslySetInnerHTML={{ __html: item.answer }}
+                />
               </motion.div>
             )}
           </AnimatePresence>

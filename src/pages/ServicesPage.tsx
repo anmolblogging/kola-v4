@@ -72,7 +72,7 @@ const detailedServices = [
     num: "01",
     title: "Website Development",
     tagline: "High-speed, SEO-engineered digital platforms.",
-    desc: "We build websites that load fast, rank well and convert visitors into customers. Whether that means a custom-coded platform, a WordPress site or a Shopify store, every build is designed around your business goals, not a template. Speed, structure and search visibility are built in from day one.",
+    desc: "We engineer lightning-fast, conversion-focused websites that position your brand as a market leader. Whether you require a custom WordPress theme, an optimized Shopify store, or a bespoke React / Next.js web application, our builds prioritize performance, clean code, and zero technical debt.",
     deliverables: [
       "Custom WordPress & WooCommerce Development",
       "Shopify & Shopify Plus Store Architecture",
@@ -87,12 +87,11 @@ const detailedServices = [
     icon: Search,
     num: "02",
     title: "SEO, AEO & GEO",
-    tagline: "Search, Answer & Generative Engine Optimization — visibility across Google and every AI answer engine.",
-    desc: "Search is no longer just Google. We optimise your brand for traditional search, AI answer engines and generative search results, so you show up wherever your customers are looking. Technical SEO, structured content and ongoing optimisation keep you visible as search itself evolves.",
+    tagline: "Own search rankings across Google and AI search engines.",
+    desc: "Search is evolving rapidly. We optimize your digital presence not only for traditional search engines like Google and Bing, but also for generative AI answer engines (ChatGPT, Perplexity, Google Gemini). We build enduring organic authority that turns searchers into qualified buyers.",
     deliverables: [
       "Technical SEO Audits & Core Web Vitals Remediation",
       "Answer & Generative Engine Optimization (AEO & GEO) for LLMs & AI Search",
-      "Generative Engine Optimization (GEO) for AI Overviews",
       "High-Intent Keyword Strategy & Content Topic Clusters",
       "Structured Schema Markup & Rich Snippet Engineering",
       "High-Quality White-Hat Editorial Link Acquisition",
@@ -103,9 +102,9 @@ const detailedServices = [
     id: "lead-gen",
     icon: Target,
     num: "03",
-    title: "Lead Generation & Conversion",
-    tagline: "Systematic inbound pipelines that turn traffic into revenue.",
-    desc: "Traffic without conversion is wasted spend. We build landing pages, forms and follow-up systems designed to turn visitors into qualified leads. Every funnel is tested and refined against real numbers, so your cost per lead keeps dropping while quality goes up.",
+    title: "Lead Generation & Conversion Funnels",
+    tagline: "Systematized pipelines that turn traffic into revenue.",
+    desc: "Traffic is meaningless without conversion. We construct multi-step lead generation funnels, high-converting landing pages, and automated nurture sequences that capture high-intent prospects and deliver sales-ready leads straight into your CRM.",
     deliverables: [
       "High-Converting Landing Page Design & Copywriting",
       "Multi-Step Lead Qualification Funnels",
@@ -119,7 +118,7 @@ const detailedServices = [
     id: "brand-identity",
     icon: Palette,
     num: "04",
-    title: "Brand Identity & Design",
+    title: "Brand Identity & Visual Design",
     tagline: "Memorable design systems that command authority and trust.",
     desc: "We define brand aesthetics that captivate modern audiences. From cohesive design systems and visual identity to comprehensive UI/UX guidelines and marketing collateral, we ensure every touchpoint conveys premium quality and credibility.",
     deliverables: [
@@ -135,9 +134,9 @@ const detailedServices = [
     id: "performance-marketing",
     icon: BarChart3,
     num: "05",
-    title: "Performance Marketing",
+    title: "Performance Marketing & Paid Ads",
     tagline: "ROI-driven acquisition campaigns tuned for maximum ROAS.",
-    desc: "We run paid campaigns on Google, Meta and LinkedIn built around results you can measure, not impressions that look nice in a report. Creative, targeting and budget are optimised continuously, so every rupee spent works toward qualified leads.",
+    desc: "Stop burning ad budget on vanity impressions. We structure, manage, and scale data-backed paid advertising campaigns across Meta Ads, Google Ads, and LinkedIn with relentless focus on customer acquisition cost (CAC) and verified ROAS.",
     deliverables: [
       "Full-Funnel Meta Ads (Facebook & Instagram) Management",
       "Google Search, Performance Max & Shopping Campaigns",
@@ -153,7 +152,7 @@ const detailedServices = [
     num: "06",
     title: "Social Media Marketing",
     tagline: "Build a loyal, engaged community around your brand.",
-    desc: "We turn social channels into brand growth engines. Our content strategy, video reel & carousel concepts, and community engagement tactics ensure your brand stays top-of-mind and builds compounding social proof.",
+    desc: "We turn social channels into brand growth engines. Our content strategy, video reel concepts, and community engagement tactics ensure your brand stays top-of-mind and builds compounding social proof.",
     deliverables: [
       "Cross-Platform Social Media Strategy & Positioning",
       "Monthly Content Calendars (Reels, Carousels, Stories)",
@@ -169,7 +168,7 @@ const detailedServices = [
     num: "07",
     title: "Content Creation & Strategy",
     tagline: "Authority-building editorial that ranks and converts.",
-    desc: "Good content starts with what your audience is searching for, not what is easy to write. We plan and create blog posts, campaigns and website copy built around real search intent and genuine business goals, so every piece works toward a result.",
+    desc: "Content is the bedrock of modern digital authority. We write compelling, deeply researched editorial pieces, case studies, and website copy that educates your prospective buyers and solidifies your market dominance.",
     deliverables: [
       "SEO-Optimized Pillar Articles & Thought Leadership",
       "Website Copywriting & Conversion Sales Pages",
@@ -183,9 +182,9 @@ const detailedServices = [
     id: "ai-tools",
     icon: Cpu,
     num: "08",
-    title: "AI-Powered Tools & Applications",
+    title: "AI-Powered Tools & Intelligent Workflows",
     tagline: "Automate operations and build smart digital tools.",
-    desc: "We turn AI ideas into working products. From internal tools that save your team hours to customer-facing applications, we build with secure integrations, clean data handling and dashboards that show real impact, not just a demo that looks good once.",
+    desc: "Leverage the power of generative AI to work smarter. We build custom conversational AI chatbots, internal process automations, and intelligent tools that eliminate manual tasks and provide seamless 24/7 client interactions.",
     deliverables: [
       "Custom AI Chatbots & Customer Support Assistants",
       "Intelligent Lead Qualification & Automated Routing",
@@ -313,7 +312,7 @@ const ServicesPage = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-8 items-start pt-4 ">
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                From high-performance web engineering and search supremacy (SEO & AEO) to high-converting lead pipelines and bespoke AI tools—everything we engineer is designed to deliver measurable commercial returns.
+                From websites that convert and social content that builds an audience, to search supremacy across SEO, AEO & GEO and bespoke AI tools, everything we engineer is designed to deliver measurable commercial returns.
               </p>
 
               <div className="flex flex-col sm:flex-row lg:flex-col gap-3">
@@ -380,7 +379,7 @@ const ServicesPage = () => {
                         </p>
                         {service.deliverables.map((item, idx) => (
                           <div key={idx} className="flex items-start gap-2.5 text-xs text-muted-foreground">
-                            <CheckCircle2 size={15} className="text-emerald-500 shrink-0 mt-0.5" />
+                            <CheckCircle2 size={15} className="text-black/60 shrink-0 mt-0.5" />
                             <span>{item}</span>
                           </div>
                         ))}
@@ -473,7 +472,7 @@ const ServicesPage = () => {
                       "Monthly executive analytics reports",
                     ].map((f, i) => (
                       <div key={i} className="flex items-center gap-2.5 text-xs text-foreground">
-                        <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
+                        <CheckCircle2 size={16} className="text-black/60 shrink-0" />
                         <span>{f}</span>
                       </div>
                     ))}
@@ -513,7 +512,7 @@ const ServicesPage = () => {
                       "Strict adherence to budgets & deliverables",
                     ].map((f, i) => (
                       <div key={i} className="flex items-center gap-2.5 text-xs text-foreground">
-                        <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
+                        <CheckCircle2 size={16} className="text-black/60 shrink-0" />
                         <span>{f}</span>
                       </div>
                     ))}
