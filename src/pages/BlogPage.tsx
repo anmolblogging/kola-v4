@@ -70,6 +70,7 @@ interface WPProject {
   title: { rendered: string };
   aioseo_head_json?: { schema?: AioseoSchema };
   acf?: { hover_img?: string; tags?: string[] };
+  date: string;
   _embedded?: { "wp:featuredmedia"?: Array<{ source_url: string }> };
 }
 interface NormalizedRelated {
@@ -84,6 +85,8 @@ interface NormalizedProject {
   slug: string;
   title: string;
   img: string;
+  formattedDate: string;
+  category?: string;
   tags: string[];
 }
 
@@ -117,19 +120,11 @@ const getSchemaArticleNode = (schema?: AioseoSchema) =>
 const getArticleTags = (schema?: AioseoSchema, post?: WPPost): string[] => {
   const tagsSet = new Set<string>();
   const node = getSchemaArticleNode(schema);
-  if (node?.articleSection) {
-    (node.articleSection as string)
-      .split(",")
-      .map((t) => decodeHtmlEntities(t.trim()))
-      .filter(Boolean)
-      .forEach((t) => tagsSet.add(t));
-  }
+
   if (post?._embedded?.["wp:term"]) {
-    post._embedded["wp:term"].forEach((termGroup) => {
-      if (Array.isArray(termGroup)) {
-        termGroup.forEach((term) => {
-          if (term.name) tagsSet.add(decodeHtmlEntities(term.name.trim()));
-        });
+    post._embedded["wp:term"].flat().forEach((term: any) => {
+      if (term.taxonomy === "post_tag" && term.name) {
+        tagsSet.add(decodeHtmlEntities(term.name.trim()));
       }
     });
   }
@@ -164,8 +159,11 @@ const normalizeProject = (p: WPProject): NormalizedProject => {
   const termTags = (p as any)._embedded?.["wp:term"]?.flat()?.map((t: any) => decodeHtmlEntities(t.name)) ?? [];
   const acfTags = p.acf?.tags?.map(decodeHtmlEntities) ?? [];
   const rawSectionTags = rawSection ? rawSection.split(",").map((t) => decodeHtmlEntities(t.trim())).filter(Boolean) : [];
+  const allTerms = (p as any)._embedded?.["wp:term"]?.flat() || [];
+  const termCategories = allTerms.filter((t: any) => t?.taxonomy === "project-category" && t?.name).map((t: any) => decodeHtmlEntities(t.name));
+  const category = termCategories.length > 0 ? termCategories[0] : (rawSectionTags.length > 0 ? rawSectionTags[0] : undefined);
   const allTags = Array.from(new Set([...rawSectionTags, ...termTags, ...acfTags])).filter(Boolean).slice(0, 3);
-  return { slug: p.slug, title: decodeHtmlEntities(p.title.rendered), img, tags: allTags };
+  return { slug: p.slug, title: decodeHtmlEntities(p.title.rendered), img, formattedDate: formatDate(p.date), category, tags: allTags };
 };
 
 /* ══════════════════════════════════════════
@@ -420,36 +418,22 @@ const ProjectSidebarCard = memo(({ project, index }: { project: NormalizedProjec
       viewport={{ once: true }}
       transition={{ delay: index * 0.07, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       onClick={() => navigate(`/project/${project.slug}`)}
-      className="group cursor-pointer py-3 border-b border-black/[0.06] last:border-b-0"
+      className="group cursor-pointer py-3 border-b border-black/[0.06] last:border-b-0 flex items-center gap-4"
     >
-      <div className="relative overflow-hidden rounded-[10px] mb-2.5 h-[120px]">
+      <div className="relative overflow-hidden rounded-[8px] w-[80px] h-[80px] shrink-0">
         <img src={project.img} alt={project.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
           loading="lazy" />
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/8 transition-colors duration-300 rounded-[10px]" />
-        <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 scale-75 group-hover:scale-100">
-          <ArrowUpRight size={10} />
-        </div>
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/8 transition-colors duration-300 rounded-[8px]" />
       </div>
-      <p className="text-[12.5px] font-medium text-black group-hover:text-black/45 transition-colors duration-200 leading-snug">
-        {project.title}
-      </p>
-      {project.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mt-1.5">
-          {project.tags.slice(0, 2).map((t) => (
-            <span
-              key={t}
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/projects/tag/${encodeURIComponent(t.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`);
-              }}
-              className="inline-block px-2 py-0.5 text-[10.5px] border border-black/[0.1] rounded-full text-black/45 hover:border-black/30 hover:text-black hover:bg-black/[0.04] transition-colors cursor-pointer"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      )}
+      <div className="flex-1 min-w-0">
+        <p className="text-[12.5px] font-medium text-black group-hover:text-black/45 transition-colors duration-200 leading-snug">
+          {project.title}
+        </p>
+        {project.category && (
+          <span className="inline-block px-2.5 py-1 mt-1.5 text-[10.5px] border border-black/[0.1] rounded-full text-black/45 bg-black/[0.02]">{project.category}</span>
+        )}
+      </div>
     </motion.div>
   );
 });
@@ -473,18 +457,9 @@ const RelatedSidebarCard = memo(({ post, index }: { post: NormalizedRelated; ind
         {num}
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-[12.5px] font-medium text-black group-hover:text-black/55 transition-colors duration-200 leading-[1.35] line-clamp-2">
+        <p className="text-[12.5px] font-medium text-black group-hover:text-black/55 transition-colors duration-200 leading-[1.35]">
           {post.title}
         </p>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-[11px] text-black/35">{post.formattedDate}</span>
-          {post.categories?.length > 0 && (
-            <>
-              <span className="w-1 h-1 rounded-full bg-black/20" />
-              <span className="text-[11px] text-black/30 truncate max-w-[120px]">{post.categories[0]}</span>
-            </>
-          )}
-        </div>
       </div>
     </motion.div>
   );
@@ -661,10 +636,13 @@ const BlogPage = () => {
   /* ── Derived ── */
   const displayTitle  = decodeHtmlEntities(post.title.rendered);
   const formattedDate = formatDate(post.date);
-  const categories    = post._embedded?.["wp:term"]?.[0]?.map((t) => ({
-    id: t.id, name: decodeHtmlEntities(t.name), slug: t.slug,
-  })) ?? [];
-  const articleTags  = getArticleTags(post.aioseo_head_json?.schema);
+  const allTerms = post._embedded?.["wp:term"]?.flat() || [];
+  const categories = allTerms
+    .filter((t: any) => t?.taxonomy === "category")
+    .map((t: any) => ({
+      id: t.id, name: decodeHtmlEntities(t.name), slug: t.slug,
+    }));
+  const articleTags  = getArticleTags(post.aioseo_head_json?.schema, post);
   const articleNode  = getSchemaArticleNode(post.aioseo_head_json?.schema);
   const authorName   = typeof articleNode?.author === "object" && articleNode?.author !== null
     ? (articleNode.author as { name?: string }).name ?? "" : "";
@@ -712,7 +690,7 @@ const BlogPage = () => {
                     <div className="flex flex-wrap gap-2 mb-3">
                       {categories.map((cat) => (
                         <Link key={cat.id}
-                          to={`/blogs/category/${cat.slug || cat.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                          to={`/category/${cat.slug || cat.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
                           style={{ textDecoration: "none" }}>
                           <motion.span whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} transition={{ duration: 0.15 }}
                             className="inline-block px-3 py-1 text-[11.5px] border border-black/[0.12] rounded-full text-black/40 tracking-wide hover:border-black/30 hover:text-black/70 transition-colors duration-150 cursor-pointer">
@@ -796,7 +774,7 @@ const BlogPage = () => {
                         {articleTags.map((tag) => (
                           <Link
                             key={tag}
-                            to={`/blogs/tag/${encodeURIComponent(tag.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`}
+                            to={`/tag/${encodeURIComponent(tag.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`}
                             style={{ textDecoration: "none" }}
                           >
                             <motion.span
@@ -848,7 +826,7 @@ const BlogPage = () => {
                                   key={t}
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    navigate(`/projects/tag/${encodeURIComponent(t.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`);
+                                    navigate(`/project-tag/${encodeURIComponent(t.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`);
                                   }}
                                   className="inline-block px-2 py-0.5 text-[10.5px] border border-black/[0.1] rounded-full text-black/45 hover:border-black/30 hover:text-black hover:bg-black/[0.04] transition-colors cursor-pointer"
                                 >

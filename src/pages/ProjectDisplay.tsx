@@ -893,8 +893,8 @@ const ProjectDisplay = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const isCategoryRoute = location.pathname.startsWith("/projects/category");
-  const isTagRoute = location.pathname.startsWith("/projects/tag");
+  const isCategoryRoute = location.pathname.startsWith("/project-category");
+  const isTagRoute = location.pathname.startsWith("/project-tag");
   const categoryParam = searchParams.get("category");
   const tagParam = searchParams.get("tag");
   const pageParam = Number(searchParams.get("page") ?? 1);
@@ -958,7 +958,7 @@ const ProjectDisplay = () => {
       setActiveTagSlug(null);
       setPage(1);
       if (slug) {
-        navigate(`/projects/category/${encodeURIComponent(slug)}`);
+        navigate(`/project-category/${encodeURIComponent(slug)}`);
       } else {
         navigate("/projects");
       }
@@ -973,7 +973,7 @@ const ProjectDisplay = () => {
       setActiveCategorySlug(null);
       setPage(1);
       if (slug) {
-        navigate(`/projects/tag/${encodeURIComponent(slug)}`);
+        navigate(`/project-tag/${encodeURIComponent(slug)}`);
       } else {
         navigate("/projects");
       }

@@ -377,43 +377,6 @@ const usePosts = (
 };
 
 /* ══════════════════════════════════════════
-   GLITCH
-══════════════════════════════════════════ */
-
-const useGlitch = () => {
-  const [glitching, setGlitching] = useState(false);
-  const trigger = useCallback(() => {
-    setGlitching(true);
-    setTimeout(() => setGlitching(false), 500);
-  }, []);
-  return { glitching, trigger };
-};
-
-const GlitchOverlay = memo(() => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: [0, 1, 0.4, 1, 0] }}
-    transition={{ duration: 0.5 }}
-    className="absolute inset-0 z-10 pointer-events-none overflow-hidden"
-  >
-    {[0, 1, 2].map((i) => (
-      <motion.div key={i}
-        animate={{ x: [0, -6 + i * 4, 6 - i * 2, 0], opacity: [0, 0.6, 0.2, 0] }}
-        transition={{ duration: 0.3, delay: i * 0.05 }}
-        className="absolute inset-0"
-        style={{
-          background:
-            i === 0 ? "rgba(255,0,0,0.2)"
-            : i === 1 ? "rgba(0,255,0,0.15)"
-            : "rgba(0,150,255,0.2)",
-          mixBlendMode: "screen",
-        }}
-      />
-    ))}
-  </motion.div>
-));
-
-/* ══════════════════════════════════════════
    BLOG CARD
 ══════════════════════════════════════════ */
 
@@ -424,97 +387,75 @@ interface BlogCardProps {
   onTagClick: (item: PostTaxonomyItem) => void;
 }
 
-const BlogCard = memo(({ post, index, onCategoryClick, onTagClick }: BlogCardProps) => {
-  const { glitching, trigger } = useGlitch();
+const BlogCard = memo(({ post, index, onCategoryClick }: BlogCardProps) => {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 28 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.07, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      className="group overflow-hidden rounded-xl border border-black/10 bg-white relative flex flex-col"
-      onMouseEnter={() => { setHovered(true); trigger(); }}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Header */}
-      <div className="flex justify-between items-start px-5 py-4 border-b border-black/10 gap-3"
-        style={{ minHeight: "80px" }}>
-        <div className="min-w-0 flex-1">
-          <Link
-            to={`/${post.slug}`}
-            className="text-[14.5px] text-black font-medium leading-snug block mb-2 hover:text-black/70 transition-colors"
-          >
-            {post.title}
-          </Link>
-          {/* Category + tag pills */}
-          {post.allTerms.length > 0 && (
-            <div
-              className="flex gap-1.5 overflow-x-auto"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              onWheel={(e) => { e.currentTarget.scrollLeft += e.deltaY; }}
-            >
-              {post.categories.map((cat) => (
-                <button
-                  key={`cat-${cat.slug || cat.name}`}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onCategoryClick(cat);
-                  }}
-                  className="text-[10px] px-2.5 py-0.5 text-black/55 border border-black/15 whitespace-nowrap hover:border-black/40 hover:text-black transition-colors duration-150 shrink-0 cursor-pointer rounded-xl"
-                >
-                  {cat.name}
-                </button>
-              ))}
-              {post.tags.slice(0, 3).map((tag) => (
-                <button
-                  key={`tag-${tag.slug || tag.name}`}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onTagClick(tag);
-                  }}
-                  className="text-[10px] px-2.5 py-0.5 text-black/40 border border-black/[0.08] whitespace-nowrap hover:border-black/30 hover:text-black/70 transition-colors duration-150 shrink-0 cursor-pointer bg-black/[0.02] rounded-xl"
-                >
-                  {tag.name}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-        <Link
-          to={`/${post.slug}`}
-          className="relative w-4 h-4 overflow-hidden shrink-0 mt-0.5"
-          tabIndex={-1}
-        >
-          <motion.span animate={hovered ? { x: 16, y: -16, opacity: 0 } : { x: 0, y: 0, opacity: 1 }} transition={{ duration: 0.18 }} className="absolute">
-            <ArrowUpRight size={16} className="text-black/50" />
-          </motion.span>
-          <motion.span animate={hovered ? { x: 0, y: 0, opacity: 1 } : { x: -16, y: 16, opacity: 0 }} transition={{ duration: 0.18 }} className="absolute">
-            <ArrowUpRight size={16} className="text-black" />
-          </motion.span>
+    <div className="h-full block">
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 28 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ delay: index * 0.07, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="group overflow-hidden rounded-xl border border-black/10 bg-white h-full flex flex-col transition-all duration-300 hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:border-black/20"
+      >
+        {/* Image */}
+        <Link to={`/${post.slug}`} className="relative overflow-hidden aspect-[16/10] bg-black/[0.03] block">
+          <motion.img
+            src={post.img}
+            alt={post.imgAlt}
+            className="w-full h-full object-cover"
+            animate={{ scale: hovered ? 1.05 : 1 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            loading="lazy"
+          />
+          <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100 shadow-sm">
+            <ArrowUpRight size={13} className="text-black" />
+          </div>
         </Link>
-      </div>
 
-      {/* Image + meta */}
-      <Link to={`/${post.slug}`} style={{ textDecoration: "none" }} className="flex-1 flex flex-col">
-        <div className="relative aspect-[16/9] overflow-hidden flex-1">
-          <motion.img src={post.img} alt={post.imgAlt}
-            className="absolute inset-0 w-full h-full object-cover"
-            animate={{ opacity: hovered && glitching ? 0 : 1 }} loading="lazy" />
-          <AnimatePresence>{glitching && <GlitchOverlay />}</AnimatePresence>
+        {/* Content */}
+        <div className="p-6 flex flex-col flex-1 justify-between">
+          <div>
+            {post.categories.length > 0 && (
+              <div className="flex gap-1.5 flex-wrap mb-3">
+                {post.categories.map((cat) => (
+                  <button key={`cat-${cat.slug || cat.name}`}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onCategoryClick(cat);
+                    }}
+                    className="text-[10.5px] px-2.5 py-0.5 rounded-full border border-black/10 text-black/45 tracking-wide bg-black/[0.02] hover:border-black/30 hover:text-black transition-colors cursor-pointer"
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+              </div>
+            )}
+            <Link to={`/${post.slug}`} className="block">
+              <h3 className={`text-[17px] font-semibold leading-snug tracking-[-0.02em] mb-2.5 transition-colors duration-200 line-clamp-2 ${hovered ? "text-black/65" : "text-black"}`}>
+                {post.title}
+              </h3>
+            </Link>
+            {post.excerpt && (
+              <p className="text-[13px] text-black/50 leading-relaxed line-clamp-2 mb-4">
+                {post.excerpt}
+              </p>
+            )}
+          </div>
+
+          <div className="pt-3 border-t border-black/[0.06] text-[11.5px] text-black/35 mt-auto">
+            <span>{post.formattedDate}</span>
+          </div>
         </div>
-        <div className="px-5 py-3 border-t border-black/10 flex items-center justify-between text-[11px] text-black/40">
-          <span>{post.formattedDate}</span>
-        </div>
-      </Link>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 });
 
@@ -522,15 +463,13 @@ interface BlogCardRowProps {
   pair: NormalizedPost[];
   rowIndex: number;
   onCategoryClick: (item: PostTaxonomyItem) => void;
-  onTagClick: (item: PostTaxonomyItem) => void;
 }
 
-const BlogCardRow = memo(({ pair, rowIndex, onCategoryClick, onTagClick }: BlogCardRowProps) => (
+const BlogCardRow = memo(({ pair, rowIndex, onCategoryClick }: BlogCardRowProps) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     {pair.map((post, i) => (
       <BlogCard key={post.slug} post={post} index={rowIndex * 2 + i}
         onCategoryClick={onCategoryClick}
-        onTagClick={onTagClick}
       />
     ))}
   </div>
@@ -821,8 +760,8 @@ const BlogDisplay = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const isCategoryRoute = location.pathname.startsWith("/blogs/category") || location.pathname.startsWith("/category");
-  const isTagRoute = location.pathname.startsWith("/blogs/tag") || location.pathname.startsWith("/tag");
+  const isCategoryRoute = location.pathname.startsWith("/category");
+  const isTagRoute = location.pathname.startsWith("/tag");
 
   const categoryParam = searchParams.get("category");
   const tagParam = searchParams.get("tag");
@@ -916,7 +855,7 @@ const BlogDisplay = () => {
       setActiveCategoryId(item.id);
       setActiveCategorySlug(item.slug);
       setPage(1);
-      navigate(`/blogs/category/${item.slug}`);
+      navigate(`/category/${item.slug}`);
     } else {
       setActiveCategoryId(null);
       setActiveCategorySlug(null);
@@ -931,7 +870,7 @@ const BlogDisplay = () => {
       setActiveTagId(item.id);
       setActiveTagSlug(item.slug);
       setPage(1);
-      navigate(`/blogs/tag/${item.slug}`);
+      navigate(`/tag/${item.slug}`);
     } else {
       setActiveTagId(null);
       setActiveTagSlug(null);
@@ -947,7 +886,7 @@ const BlogDisplay = () => {
     if (matched) {
       handleCategorySelect(matched);
     } else {
-      navigate(`/blogs/category/${item.slug}`);
+      navigate(`/category/${item.slug}`);
     }
   }, [categories, handleCategorySelect, navigate]);
 
@@ -957,7 +896,7 @@ const BlogDisplay = () => {
     if (matched) {
       handleTagSelect(matched);
     } else {
-      navigate(`/blogs/tag/${item.slug}`);
+      navigate(`/tag/${item.slug}`);
     }
   }, [tags, handleTagSelect, navigate]);
 
@@ -1097,7 +1036,6 @@ const BlogDisplay = () => {
                   postRows.map((pair, rowIdx) => (
                     <BlogCardRow key={rowIdx} pair={pair} rowIndex={rowIdx}
                       onCategoryClick={handleCardCategoryClick}
-                      onTagClick={handleCardTagClick}
                     />
                   ))
                 )}

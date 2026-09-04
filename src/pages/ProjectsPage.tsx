@@ -56,6 +56,7 @@ interface WPProject {
   title: { rendered: string };
   content: { rendered: string; protected: boolean };
   featured_media: number;
+  date: string;
   aioseo_head_json?: AioseoHeadJson;
   acf?: {
     client_requirement_solution?: string;
@@ -78,6 +79,8 @@ interface NormalizedProject {
   slug: string;
   title: string;
   img: string;
+  formattedDate: string;
+  category?: string;
   tags: string[];
 }
 
@@ -159,11 +162,17 @@ const normalizeOther = (p: WPProject): NormalizedProject => {
   const acfTags = p.acf?.tags?.map(decodeHtmlEntities) ?? [];
   const sectionTags = rawSection ? rawSection.split(",").map((t: string) => decodeHtmlEntities(t.trim())).filter(Boolean) : [];
   const tags: string[] = Array.from(new Set([...sectionTags, ...termTags, ...acfTags])).filter(Boolean).slice(0, 3);
+  const allTerms = (p as any)._embedded?.["wp:term"]?.flat() || [];
+  const termCategories = allTerms.filter((t: any) => t?.taxonomy === "project-category" && t?.name).map((t: any) => decodeHtmlEntities(t.name));
+  const category = termCategories.length > 0 ? termCategories[0] : (sectionTags.length > 0 ? sectionTags[0] : undefined);
+
   return {
     id: p.id,
     slug: p.slug,
     title: decodeHtmlEntities(p.title.rendered),
     img,
+    formattedDate: formatDate(p.date),
+    category,
     tags,
   };
 };
@@ -705,18 +714,9 @@ const BlogSidebarCard = memo(({ post, index }: { post: NormalizedBlog; index: nu
         {num}
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-[12.5px] font-medium text-black group-hover:text-black/55 transition-colors duration-200 leading-[1.35] line-clamp-2">
+        <p className="text-[12.5px] font-medium text-black group-hover:text-black/55 transition-colors duration-200 leading-[1.35]">
           {post.title}
         </p>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-[11px] text-black/35">{post.formattedDate}</span>
-          {post.categories?.length > 0 && (
-            <>
-              <span className="w-1 h-1 rounded-full bg-black/20" />
-              <span className="text-[11px] text-black/30 truncate max-w-[120px]">{post.categories[0]}</span>
-            </>
-          )}
-        </div>
       </div>
     </motion.div>
   );
@@ -854,21 +854,23 @@ const ProjectPage = () => {
   const cleanedContent = removeContentLiveParagraph(rawContent);
 
   const articleSection = getArticleSection(project.aioseo_head_json);
-  const termCategories: Array<{ name: string; slug: string }> =
-    (project as any)._embedded?.["wp:term"]?.[0]
-      ?.map((t: any) => ({
-        name: decodeHtmlEntities(t?.name ?? ""),
-        slug: t?.slug ?? String(t?.name ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-      }))
-      .filter((t: any) => Boolean(t.name)) ?? [];
+  const allTerms = (project as any)._embedded?.["wp:term"]?.flat() || [];
+  
+  const termCategories: Array<{ name: string; slug: string }> = allTerms
+    .filter((t: any) => t?.taxonomy === "project-category")
+    .map((t: any) => ({
+      name: decodeHtmlEntities(t?.name ?? ""),
+      slug: t?.slug ?? String(t?.name ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    }))
+    .filter((t: any) => Boolean(t.name));
 
-  const termTags: Array<{ name: string; slug: string }> =
-    (project as any)._embedded?.["wp:term"]?.[1]
-      ?.map((t: any) => ({
-        name: decodeHtmlEntities(t?.name ?? ""),
-        slug: t?.slug ?? String(t?.name ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-      }))
-      .filter((t: any) => Boolean(t.name)) ?? [];
+  const termTags: Array<{ name: string; slug: string }> = allTerms
+    .filter((t: any) => t?.taxonomy === "project-tag")
+    .map((t: any) => ({
+      name: decodeHtmlEntities(t?.name ?? ""),
+      slug: t?.slug ?? String(t?.name ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    }))
+    .filter((t: any) => Boolean(t.name));
 
   const acfTags: Array<{ name: string; slug: string }> =
     (project.acf?.tags?.map(decodeHtmlEntities) ?? []).map((t: string) => ({
@@ -889,7 +891,7 @@ const ProjectPage = () => {
 
   const tags: Array<{ name: string; slug: string }> = Array.from(
     new Map(
-      [...termTags, ...termCategories, ...sectionTags, ...acfTags].map((item) => [item.slug, item])
+      [...termTags, ...acfTags].map((item) => [item.slug, item])
     ).values()
   );
 
@@ -958,7 +960,7 @@ const ProjectPage = () => {
                         <motion.button
                           key={cat.slug}
                           type="button"
-                          onClick={() => navigate(`/projects/category/${encodeURIComponent(cat.slug)}`)}
+                          onClick={() => navigate(`/project-category/${encodeURIComponent(cat.slug)}`)}
                           whileHover={{ scale: 1.04 }}
                           whileTap={{ scale: 0.96 }}
                           transition={{ duration: 0.15 }}
@@ -1056,7 +1058,7 @@ const ProjectPage = () => {
                               key={tag.slug}
                               type="button"
                               onClick={() =>
-                                navigate(`/projects/tag/${encodeURIComponent(tag.slug)}`)
+                                navigate(`/project-tag/${encodeURIComponent(tag.slug)}`)
                               }
                               whileHover={{ scale: 1.04 }}
                               whileTap={{ scale: 0.96 }}
@@ -1088,34 +1090,20 @@ const ProjectPage = () => {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                             onClick={() => navigate(`/${p.slug}`)}
-                            style={{ width: "62vw", flexShrink: 0 }}
-                            className="cursor-pointer group">
-                            <div className="relative overflow-hidden rounded-2xl mb-3 h-[130px]">
+                            style={{ width: "70vw", flexShrink: 0 }}
+                            className="cursor-pointer group flex items-center gap-4">
+                            <div className="relative overflow-hidden rounded-[8px] w-[80px] h-[80px] shrink-0">
                               <img src={p.img} alt={p.title}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 loading="lazy" />
                               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                              <div className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
-                                <ArrowUpRight size={11} />
-                              </div>
                             </div>
-                            <p className="text-[13px] font-medium text-black leading-snug group-hover:text-black/50 transition-colors">{p.title}</p>
-                            {p.tags?.length > 0 && (
-                              <div className="flex flex-wrap gap-1.5 mt-1.5">
-                                {p.tags.slice(0, 2).map((t) => (
-                                  <span
-                                    key={t}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      navigate(`/projects/tag/${encodeURIComponent(t.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`);
-                                    }}
-                                    className="inline-block px-2 py-0.5 text-[10.5px] border border-black/[0.1] rounded-full text-black/45 hover:border-black/30 hover:text-black hover:bg-black/[0.04] transition-colors cursor-pointer"
-                                  >
-                                    {t}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[13px] font-medium text-black leading-snug group-hover:text-black/50 transition-colors">{p.title}</p>
+                              {p.category && (
+                                <span className="inline-block px-2.5 py-1 mt-1.5 text-[10.5px] border border-black/[0.1] rounded-full text-black/45 bg-black/[0.02]">{p.category}</span>
+                              )}
+                            </div>
                           </motion.div>
                         ))}
                       </DragCarousel>
@@ -1155,11 +1143,8 @@ const ProjectPage = () => {
                                 <ArrowUpRight size={11} />
                               </div>
                             </div>
-                            <p className="text-[13px] font-medium text-black leading-snug group-hover:text-black/50 transition-colors line-clamp-2">
+                            <p className="text-[13px] font-medium text-black leading-snug group-hover:text-black/50 transition-colors mt-3">
                               {p.title}
-                            </p>
-                            <p className="text-[11px] text-black/30 mt-0.5">
-                              {p.formattedDate}
                             </p>
                           </motion.div>
                         ))}
@@ -1193,33 +1178,21 @@ const ProjectPage = () => {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.07, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                             onClick={() => navigate(`/${p.slug}`)}
-                            className="group cursor-pointer py-3 border-b border-black/[0.06] last:border-b-0">
-                            <div className="relative overflow-hidden rounded-[10px] mb-2.5 h-[120px]">
+                            className="group cursor-pointer py-3 border-b border-black/[0.06] last:border-b-0 flex items-center gap-4">
+                            <div className="relative overflow-hidden rounded-[8px] w-[80px] h-[80px] shrink-0">
                               <img src={p.img} alt={p.title}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                                 loading="lazy" />
-                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/8 transition-colors duration-300 rounded-[10px]" />
-                              <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 scale-75 group-hover:scale-100">
-                                <ArrowUpRight size={10} />
-                              </div>
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/8 transition-colors duration-300 rounded-[8px]" />
                             </div>
-                            <p className="text-[12.5px] font-medium text-black group-hover:text-black/45 transition-colors duration-200 leading-snug">{p.title}</p>
-                            {p.tags?.length > 0 && (
-                              <div className="flex flex-wrap gap-1.5 mt-1.5">
-                                {p.tags.slice(0, 2).map((t) => (
-                                  <span
-                                    key={t}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      navigate(`/projects/tag/${encodeURIComponent(t.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`);
-                                    }}
-                                    className="inline-block px-2 py-0.5 text-[10.5px] border border-black/[0.1] rounded-full text-black/45 hover:border-black/30 hover:text-black hover:bg-black/[0.04] transition-colors cursor-pointer"
-                                  >
-                                    {t}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[12.5px] font-medium text-black group-hover:text-black/45 transition-colors duration-200 leading-snug">
+                                {p.title}
+                              </p>
+                              {p.category && (
+                                <span className="inline-block px-2.5 py-1 mt-1.5 text-[10.5px] border border-black/[0.1] rounded-full text-black/45 bg-black/[0.02]">{p.category}</span>
+                              )}
+                            </div>
                           </motion.div>
                         ))}
                       </div>
