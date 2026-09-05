@@ -384,7 +384,7 @@ interface BlogCardProps {
   post: NormalizedPost;
   index: number;
   onCategoryClick: (item: PostTaxonomyItem) => void;
-  onTagClick: (item: PostTaxonomyItem) => void;
+  onTagClick?: (item: PostTaxonomyItem) => void;
 }
 
 const BlogCard = memo(({ post, index, onCategoryClick }: BlogCardProps) => {
