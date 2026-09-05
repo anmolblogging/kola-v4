@@ -405,7 +405,7 @@ interface ProjectCardRowProps {
 const ProjectCardRow = memo(({ pair, rowIndex, onCategoryClick, onTagClick }: ProjectCardRowProps) => {
   return (
     <div
-      className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch"
+      className="grid grid-cols-2 gap-3 sm:gap-4 items-stretch"
       style={{ gridTemplateRows: "auto" }}
     >
       {pair.map((project, i) => (
@@ -449,21 +449,21 @@ const ProjectCardSubgrid = memo(({ project, index, onCategoryClick, onTagClick }
       onMouseLeave={() => setHovered(false)}
     >
       {/* HEADER */}
-      <div className="flex justify-between items-start px-5 py-4 gap-3">
+      <div className="flex justify-between items-start p-3 sm:px-5 sm:py-4 gap-2 sm:gap-3">
         {/* LEFT */}
         <div className="min-w-0 flex-1 flex flex-col">
           {/* TITLE */}
           <Link
             to={`/${project.slug}`}
-            className="text-[15px] text-black font-medium leading-snug block hover:text-black/70 transition-colors"
+            className="text-[13px] sm:text-[15px] text-black font-medium leading-snug block hover:text-black/70 transition-colors line-clamp-1 sm:line-clamp-none"
           >
             {project.title}
           </Link>
 
           {/* CATEGORY BADGES */}
           {project.categories.length > 0 && (
-            <div className="flex gap-1.5 mt-2 flex-wrap">
-              {project.categories.map((cat) => (
+            <div className="flex gap-1 sm:gap-1.5 mt-1 sm:mt-2 flex-wrap">
+              {project.categories.slice(0, 2).map((cat) => (
                 <button
                   key={`${cat.taxonomy || "cat"}-${cat.slug}`}
                   type="button"
@@ -472,7 +472,7 @@ const ProjectCardSubgrid = memo(({ project, index, onCategoryClick, onTagClick }
                     e.stopPropagation();
                     onCategoryClick(cat.slug);
                   }}
-                  className="text-xs px-2.5 py-0.5 text-black/50 border border-black/10 whitespace-nowrap leading-snug hover:border-black/30 hover:text-black transition-colors duration-150 rounded-xl cursor-pointer"
+                  className="text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-0.5 text-black/50 border border-black/10 whitespace-nowrap leading-snug hover:border-black/30 hover:text-black transition-colors duration-150 rounded-xl cursor-pointer truncate max-w-full"
                 >
                   {cat.name}
                 </button>
@@ -484,7 +484,7 @@ const ProjectCardSubgrid = memo(({ project, index, onCategoryClick, onTagClick }
         {/* ARROW */}
         <Link
           to={`/${project.slug}`}
-          className="relative w-4 h-4 overflow-hidden shrink-0 mt-0.5"
+          className="relative w-4 h-4 overflow-hidden shrink-0 mt-0.5 hidden xs:block"
           tabIndex={-1}
         >
           <motion.span
@@ -510,7 +510,7 @@ const ProjectCardSubgrid = memo(({ project, index, onCategoryClick, onTagClick }
         style={{ textDecoration: "none" }}
         className="mt-auto block flex-1"
       >
-        <div className="relative w-full h-[220px] overflow-hidden">
+        <div className="relative w-full h-[140px] sm:h-[180px] md:h-[220px] overflow-hidden">
           <motion.img
             src={project.img}
             alt={project.title}
@@ -550,15 +550,15 @@ const SkeletonCard = memo(({ index }: { index: number }) => (
     transition={{ delay: index * 0.05, duration: 0.3 }}
     className="border border-black/10 overflow-hidden rounded-xl flex flex-col"
   >
-    <div className="px-5 py-4 border-b border-black/10 space-y-2">
-      <div className="h-4 bg-black/[0.06] rounded-sm w-3/4 animate-pulse" />
+    <div className="p-3 sm:px-5 sm:py-4 border-b border-black/10 space-y-2">
+      <div className="h-3.5 sm:h-4 bg-black/[0.06] rounded-sm w-3/4 animate-pulse" />
       <div className="flex gap-1.5">
-        {[60, 80, 70].map((w, i) => (
-          <div key={i} className="h-5 bg-black/[0.04] rounded-sm animate-pulse" style={{ width: w }} />
+        {[40, 60].map((w, i) => (
+          <div key={i} className="h-4 sm:h-5 bg-black/[0.04] rounded-full animate-pulse" style={{ width: w }} />
         ))}
       </div>
     </div>
-    <div className="aspect-[16/9] bg-black/[0.04] animate-pulse" />
+    <div className="h-[140px] sm:h-[180px] md:h-[220px] bg-black/[0.04] animate-pulse" />
   </motion.div>
 ));
 
@@ -1146,13 +1146,13 @@ const ProjectDisplay = () => {
                 className="flex flex-col gap-4"
               >
                 {loading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     {Array.from({ length: PER_PAGE }).map((_, i) => (
                       <SkeletonCard key={i} index={i} />
                     ))}
                   </div>
                 ) : projects.length === 0 && (activeCategorySlug || activeTagSlug) ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                     <EmptyState
                       filterLabel={activeFilterLabel ?? "selected filter"}
                       onClear={() => {

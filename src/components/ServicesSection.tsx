@@ -112,7 +112,7 @@ const TechIcon = memo(({ icon: Icon, name }: { icon: typeof SiWordpress; name: s
   <div className="relative group">
     <div
       className="
-        w-11 h-11
+        w-9 h-9 sm:w-10 sm:h-10 md:w-10 md:h-10 lg:w-11 lg:h-11
         rounded-xl
         border border-black/10
         bg-white
@@ -122,7 +122,7 @@ const TechIcon = memo(({ icon: Icon, name }: { icon: typeof SiWordpress; name: s
         group-hover:scale-105 group-hover:-translate-y-0.5
       "
     >
-      <Icon size={18} className="text-black/80 group-hover:text-black transition-colors" />
+      <Icon size={16} className="text-black/80 group-hover:text-black transition-colors md:scale-105 lg:scale-110" />
     </div>
 
     {/* TOOLTIP */}
@@ -157,17 +157,17 @@ const ServiceRow = memo(({ service, isOpen, onToggle }: ServiceRowProps) => (
     {/* ROW */}
     <div
       onClick={onToggle}
-      className="flex items-center justify-between group cursor-pointer select-none py-1"
+      className="flex items-center justify-between group cursor-pointer select-none py-1 md:py-1.5"
     >
       {/* LEFT CONTENT */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3.5 md:gap-4">
         {/* ICON */}
         <div
           className="
-            w-11 h-11 rounded-full
+            w-9 h-9 sm:w-10 sm:h-10 md:w-10 md:h-10 lg:w-11 lg:h-11 rounded-full
             flex items-center justify-center
             bg-black text-white grayscale
-            shadow-lg shrink-0
+            shadow-md shrink-0
           "
         >
           <img
@@ -177,12 +177,12 @@ const ServiceRow = memo(({ service, isOpen, onToggle }: ServiceRowProps) => (
             height={20}
             loading="lazy"
             decoding="async"
-            className="w-5 h-5 invert"
+            className="w-4 h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 invert"
           />
         </div>
 
         {/* TEXT */}
-        <span className="text-lg font-medium group-hover:text-black/75 transition-colors">
+        <span className="text-[15px] sm:text-base md:text-[16.5px] lg:text-lg font-medium group-hover:text-black/75 transition-colors">
           {service.title}
         </span>
       </div>
@@ -196,10 +196,10 @@ const ServiceRow = memo(({ service, isOpen, onToggle }: ServiceRowProps) => (
         }}
         whileTap={{ scale: 0.9 }}
         className="
-          w-8 h-8 rounded-full
+          w-7 h-7 md:w-8 md:h-8 rounded-full
           border border-black/15
           flex items-center justify-center
-          hover:bg-black/[0.05] transition-colors
+          hover:bg-black/[0.05] transition-colors shrink-0
         "
         aria-label={`Toggle ${service.title}`}
       >
@@ -207,7 +207,7 @@ const ServiceRow = memo(({ service, isOpen, onToggle }: ServiceRowProps) => (
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
         >
-          <Plus size={16} />
+          <Plus size={15} />
         </motion.div>
       </motion.button>
     </div>
@@ -220,9 +220,9 @@ const ServiceRow = memo(({ service, isOpen, onToggle }: ServiceRowProps) => (
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-          className="overflow-hidden pl-[60px] pr-4 text-md text-muted-foreground mt-2"
+          className="overflow-hidden pl-12 md:pl-[54px] lg:pl-[60px] pr-2 text-sm md:text-[14.5px] text-muted-foreground mt-2"
         >
-          <p className="pb-2">{service.desc}</p>
+          <p className="pb-2 leading-[1.6]">{service.desc}</p>
         </motion.div>
       )}
     </AnimatePresence>
@@ -239,19 +239,19 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <section id="services" className="min-h-[90vh] flex items-center py-12 content-visibility-auto">
-      <div className="section-container w-full p-4 md:p-10">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
+    <section id="services" className="min-h-0 lg:min-h-[90vh] flex items-center py-10 md:py-14 lg:py-16 content-visibility-auto">
+      <div className="section-container w-full px-6 md:px-8 lg:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_1.05fr] lg:grid-cols-[1.1fr_0.9fr] gap-8 md:gap-10 lg:gap-16 items-start">
           {/* ================= LEFT COLUMN (Sticky) ================= */}
-          <div className="lg:sticky lg:top-32 space-y-8">
-            <h2 className="text-[clamp(2.2rem,4vw,3.2rem)] leading-[1.05] tracking-[-0.02em] mb-12 md:mb-16">
+          <div className="md:sticky md:top-28 lg:top-32 space-y-6 md:space-y-8">
+            <h2 className="text-[clamp(2rem,3.5vw,3.2rem)] leading-[1.05] tracking-[-0.02em] mb-6 md:mb-8 lg:mb-12">
               <span className="text-muted-foreground font-medium">Services that </span>
               <span className="text-foreground font-semibold">supercharge your business.</span>
             </h2>
 
             {/* TECH STACK */}
             <motion.div
-              className="flex flex-wrap gap-3 mt-10"
+              className="flex flex-wrap gap-2 sm:gap-2.5 md:gap-2.5 lg:gap-3 mt-6 md:mt-8"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
@@ -264,7 +264,7 @@ const ServicesSection = () => {
           </div>
 
           {/* ================= RIGHT ================= */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4 md:gap-5 lg:gap-6">
             {services.map((service, i) => (
               <ServiceRow
                 key={service.title}

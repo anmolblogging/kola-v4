@@ -22,16 +22,17 @@ export default defineConfig(({ mode }) => {
       mode === "development" && componentTagger(),
       {
         name: "api-contact-middleware",
-        configureServer(server) {
-          server.middlewares.use(async (req, res, next) => {
+        configureServer(server: any) {
+          server.middlewares.use(async (req: any, res: any, next: any) => {
             if (req.url === "/api/contact" && req.method === "POST") {
               let body = "";
-              req.on("data", (chunk) => {
+              req.on("data", (chunk: any) => {
                 body += chunk;
               });
               req.on("end", async () => {
                 try {
-                  (req as any).body = JSON.parse(body || "{}");
+                  req.body = JSON.parse(body || "{}");
+                  // @ts-ignore
                   const handlerModule = await import("./api/contact.js");
                   const handler = handlerModule.default;
                   const mockRes = {

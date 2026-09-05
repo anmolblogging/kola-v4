@@ -80,9 +80,9 @@ const ContactPage = () => {
         {/* ══════════════════════════════════════════
             HERO / HEADER
            ══════════════════════════════════════════ */}
-        <section className="pt-36 pb-12 md:pt-44 md:pb-16 section-container px-6 md:px-10">
+        <section className="pt-24 sm:pt-28 md:pt-32 lg:pt-40 pb-8 md:pb-12 lg:pb-16 section-container px-4 sm:px-6 md:px-8 lg:px-10">
           <div className="max-w-[1080px] mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/60 backdrop-blur-md text-xs font-medium mb-8">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-muted/60 backdrop-blur-md text-xs font-medium mb-6 md:mb-8">
               <span className="text-muted-foreground">Response within 3–4 hours</span>
             </div>
 
@@ -90,21 +90,21 @@ const ContactPage = () => {
               lines={["Let's build something", "extraordinary together."]}
               className="
                 hidden md:block
-                text-[clamp(2.6rem,5vw,4.2rem)]
+                text-[clamp(2.3rem,4.2vw,4.2rem)]
                 leading-[1.05]
                 tracking-[-0.025em]
                 max-w-[850px]
-                mb-6
+                mb-4 md:mb-6
               "
             />
             <AnimatedHeading
               lines={["Let's build", "something great", "together."]}
               className="
                 md:hidden
-                text-[clamp(2.4rem,6vw,3.5rem)]
+                text-[clamp(2rem,6vw,2.8rem)]
                 leading-[1.08]
                 tracking-[-0.025em]
-                mb-6
+                mb-4
               "
             />
 
@@ -117,11 +117,11 @@ const ContactPage = () => {
         {/* ══════════════════════════════════════════
             MAIN STATIC CONTACT GRID
            ══════════════════════════════════════════ */}
-        <section className="pb-24 section-container px-6 md:px-10">
+        <section className="pb-16 md:pb-20 lg:pb-24 section-container px-4 sm:px-6 md:px-8 lg:px-10">
           <div className="max-w-[1080px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] lg:grid-cols-[1.1fr_0.9fr] gap-6 md:gap-8 lg:gap-14 items-stretch">
               {/* LEFT: STATIC FORM (CONNECTED TO /api/contact) */}
-              <div className="h-full p-7 md:p-10 rounded-3xl border border-border bg-card shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
+              <div className="h-full p-6 sm:p-7 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl border border-border bg-card shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
                 <AnimatePresence mode="wait">
                   {status === "success" ? (
                     <motion.div
@@ -255,8 +255,8 @@ const ContactPage = () => {
               {/* RIGHT: DIRECT INFO & ADDRESS */}
               <div className="h-full">
                 {/* Contact Card */}
-                <div className="h-full p-7 md:p-8 rounded-3xl border border-border bg-[#fafafa]">
-                  <h3 className="text-lg font-bold mb-6">Direct Information</h3>
+                <div className="h-full p-6 sm:p-7 md:p-8 rounded-2xl md:rounded-3xl border border-border bg-[#fafafa]">
+                  <h3 className="text-lg font-bold mb-5 md:mb-6">Direct Information</h3>
 
                   <div className="space-y-5 text-sm">
                     {/* Email */}

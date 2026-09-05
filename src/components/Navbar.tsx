@@ -21,7 +21,7 @@ const Navbar = () => {
   return (
     <>
 
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-[calc(100%-48px)] md:w-auto">
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-[calc(100%-48px)] lg:w-auto">
         <motion.div
           animate={{ padding: "10px 18px" }}
           transition={{ type: "spring", stiffness: 200, damping: 25 }}
@@ -41,7 +41,7 @@ const Navbar = () => {
           </Link>
 
           {/* DESKTOP LINKS */}
-          <motion.div className="hidden md:flex items-center gap-7 overflow-hidden">
+          <motion.div className="hidden lg:flex items-center gap-7 overflow-hidden">
             {navLinks.map((link) =>
               link.type === "hash" ? (
                 <HashLink
@@ -67,7 +67,7 @@ const Navbar = () => {
           {/* CONTACT */}
           <motion.div
             animate={{ opacity: 1, width: "auto" }}
-            className="hidden md:inline-flex"
+            className="hidden lg:inline-flex"
           >
             <Link
               to="/contact"
@@ -80,7 +80,7 @@ const Navbar = () => {
           {/* DESKTOP DOTS */}
           <motion.div
             animate={{ opacity: 0 }}
-            className="hidden md:flex items-center gap-1 cursor-pointer"
+            className="hidden lg:flex items-center gap-1 cursor-pointer"
           >
             {[0, 1, 2].map((i) => (
               <motion.span
@@ -92,10 +92,10 @@ const Navbar = () => {
             ))}
           </motion.div>
 
-          {/* MOBILE BUTTON */}
+          {/* MOBILE & TABLET BUTTON */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex items-center gap-1 p-2"
+            className="lg:hidden flex items-center gap-1 p-2"
           >
             {mobileOpen ? (
               <X size={20} />
@@ -114,7 +114,7 @@ const Navbar = () => {
           </button>
         </motion.div>
 
-        {/* MOBILE MENU */}
+        {/* MOBILE & TABLET MENU */}
         <AnimatePresence>
           {mobileOpen && (
             <>
@@ -131,7 +131,7 @@ const Navbar = () => {
                 exit={{ opacity: 0, y: -8, scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 280, damping: 24 }}
                 className="
-                  md:hidden
+                  lg:hidden
                   absolute left-0 right-0 mt-2
                   bg-white
                   border border-black/8

@@ -232,20 +232,20 @@ const ProjectCard = ({
                    cursor-pointer transition-colors duration-300 hover:border-foreground/25"
       >
         {/* Header — the card leads with its name, not with the picture */}
-        <div className="px-5 pt-4 pb-4 flex items-center justify-between gap-4">
+        <div className="p-3 sm:px-5 sm:pt-4 sm:pb-4 flex items-center justify-between gap-2 sm:gap-4">
           <div className="min-w-0">
-            <h3 className="text-[16px] md:text-[17px] font-semibold leading-tight tracking-[-0.01em] text-foreground mb-2">
+            <h3 className="text-[13px] sm:text-[16px] md:text-[17px] font-semibold leading-tight tracking-[-0.01em] text-foreground mb-1 sm:mb-2 line-clamp-1 sm:line-clamp-none">
               {project.title}
             </h3>
 
             {project.categories.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
-                {project.categories.slice(0, 3).map((cat) => (
+              <div className="flex flex-wrap gap-1 sm:gap-1.5">
+                {project.categories.slice(0, 2).map((cat) => (
                   <span
                     key={`${cat.taxonomy || "cat"}-${cat.slug}`}
                     data-slug={cat.slug}
-                    className="text-[11.5px] font-normal px-2.5 py-[4px] whitespace-nowrap
-                               border border-border text-foreground/75 bg-background rounded-xl"
+                    className="text-[10px] sm:text-[11.5px] font-normal px-2 py-[2px] sm:px-2.5 sm:py-[4px] whitespace-nowrap
+                               border border-border text-foreground/75 bg-background rounded-xl truncate max-w-full"
                   >
                     {cat.name}
                   </span>
@@ -256,7 +256,7 @@ const ProjectCard = ({
 
           {/* Arrow — plain, and it travels on hover */}
           <motion.span
-            className="shrink-0 text-muted-foreground group-hover:text-foreground transition-colors"
+            className="shrink-0 text-muted-foreground group-hover:text-foreground transition-colors hidden xs:block"
             animate={{ x: hovered ? 2 : 0, y: hovered ? -2 : 0 }}
             transition={{ duration: 0.3 }}
           >
@@ -388,20 +388,20 @@ const ProjectsSection = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.35 }}
-          className="grid sm:grid-cols-2 gap-4 md:gap-6"
+          className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6"
         >
           {loading
             ? Array.from({ length: PER_PAGE }).map((_, i) => (
                 <div
                   key={i}
-                  className="border border-border bg-card overflow-hidden animate-pulse"
+                  className="border border-border bg-card overflow-hidden animate-pulse rounded-xl"
                 >
                   {/* Mirrors the card: header block, then media */}
-                  <div className="p-5 md:p-6">
-                    <div className="h-6 w-1/2 bg-black/5 mb-3" />
-                    <div className="flex gap-2">
-                      <div className="h-7 w-28 bg-black/5" />
-                      <div className="h-7 w-24 bg-black/5" />
+                  <div className="p-3 sm:p-5 md:p-6">
+                    <div className="h-4 sm:h-6 w-1/2 bg-black/5 mb-2 sm:mb-3" />
+                    <div className="flex gap-1.5 sm:gap-2">
+                      <div className="h-5 sm:h-7 w-16 sm:w-28 bg-black/5 rounded-full" />
+                      <div className="h-5 sm:h-7 w-12 sm:w-24 bg-black/5 rounded-full" />
                     </div>
                   </div>
                   <div className="bg-black/5 aspect-[4/3] md:aspect-[16/9]" />

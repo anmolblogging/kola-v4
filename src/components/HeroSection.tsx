@@ -239,10 +239,10 @@ const HeroSection = () => {
           <rect width="100%" height="100%" fill="url(#kola-circuit)" />
         </svg>
 
-        <div className="relative z-10 flex-1 max-w-[1240px] w-full mx-auto px-6 md:px-10 py-10">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-12 items-center h-full">
+        <div className="relative z-10 flex-1 max-w-[1240px] w-full mx-auto px-6 md:px-10 py-6 md:py-10">
+          <div className="grid grid-cols-1 md:grid-cols-[1.05fr_0.95fr] lg:grid-cols-[1.05fr_0.95fr] gap-8 md:gap-8 lg:gap-12 items-center h-full">
             {/* ================= LEFT: THE WORDS ================= */}
-            <div className="text-center lg:text-left">
+            <div className="text-center md:text-left">
               {/* EYEBROW */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
@@ -399,7 +399,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative h-[380px] sm:h-[460px] lg:h-[600px] rounded-3xl overflow-hidden bg-[#EAEAEA]"
+              className="relative h-[320px] sm:h-[380px] md:h-[440px] lg:h-[600px] rounded-3xl overflow-hidden bg-[#EAEAEA]"
             >
               <spline-viewer
                 ref={splineRef}
