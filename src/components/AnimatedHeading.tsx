@@ -69,7 +69,7 @@ const AnimatedHeading = ({
         <Fragment key={lineIndex}>
           {lineIndex > 0 && <br />}
           <span
-            className={`whitespace-nowrap ${
+            className={`inline md:whitespace-nowrap break-words ${
               lineIndex === 0
                 ? "text-muted-foreground font-medium"
                 : "text-foreground font-semibold"
