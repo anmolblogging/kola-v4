@@ -18,6 +18,15 @@ const AnimatedHeading = ({
   blur = 10,
   stagger = 0.08,
   duration = 0.7,
+  breakOnMobile = true,
+}: {
+  lines: string[];
+  className?: string;
+  once?: boolean;
+  blur?: number;
+  stagger?: number;
+  duration?: number;
+  breakOnMobile?: boolean;
 }) => {
   // 🧠 memoize split words (optimization)
   const splitLines = useMemo(
@@ -67,7 +76,15 @@ const AnimatedHeading = ({
     >
       {splitLines.map((line, lineIndex) => (
         <Fragment key={lineIndex}>
-          {lineIndex > 0 && <br />}
+          {lineIndex > 0 &&
+            (breakOnMobile ? (
+              <br />
+            ) : (
+              <>
+                <br className="hidden md:block" />
+                <span className="inline md:hidden"> </span>
+              </>
+            ))}
           <span
             className={`inline md:whitespace-nowrap break-words ${
               lineIndex === 0

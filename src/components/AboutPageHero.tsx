@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import AnimatedHeading from "@/components/AnimatedHeading";
 
-const avatarJoseph = "https://framerusercontent.com/images/mgRdbBZJGPn94ft58M4tL0u810.jpg?scale-down-to=4096";
+const avatarJoseph = "https://framerusercontent.com/images/mgRdbBZJGPn94ft58M4tL0u810.jpg?scale-down-to=1024";
 
 /* ---------------- DATA ---------------- */
 
@@ -77,12 +77,12 @@ const AboutPageHero = () => {
           "
         />
         <AnimatedHeading
-          lines={["Our story, our team,", "our obsession", "with results."]}
+          lines={["Our story, our team,", "our obsession with results."]}
           className="
             md:hidden
-            text-[clamp(2.6rem,5vw,4rem)]
+            text-[clamp(2.15rem,7vw,2.6rem)]
             leading-[1.05]
-            tracking-[-0.025em]
+            tracking-[-0.03em]
             mb-20 md:mb-24
             max-w-[760px]
           "
@@ -99,6 +99,9 @@ const AboutPageHero = () => {
                 alt="Kola Communications"
                 className="w-full h-full object-cover"
                 loading="lazy"
+                decoding="async"
+                width={420}
+                height={525}
               />
 
               {/* SOCIAL BAR */}
@@ -135,7 +138,7 @@ const AboutPageHero = () => {
             {/* ===== PARAGRAPHS — mobile only, shown between image and values ===== */}
             <div className="lg:hidden mt-10 space-y-8">
               {paragraphs.map((p, i) => (
-                <p key={i} className="text-xl leading-[1.65]">
+                <p key={i} className="text-[17px] leading-[1.65]">
                   <span className="font-medium">{p.bold}</span>{" "}
                   <span className="text-muted-foreground">{p.text}</span>
                 </p>

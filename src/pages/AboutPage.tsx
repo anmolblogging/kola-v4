@@ -208,6 +208,7 @@ const AboutPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-8 lg:gap-14 items-end mb-16">
               <AnimatedHeading
                 lines={["What we do,", "engineered for impact."]}
+                breakOnMobile={false}
                 className="text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.05] tracking-[-0.02em]"
               />
             </div>
@@ -248,6 +249,7 @@ const AboutPage = () => {
           <div className="max-w-[1080px] mx-auto">
             <AnimatedHeading
               lines={["How we work,", "start to scale."]}
+              breakOnMobile={false}
               className="text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.05] tracking-[-0.02em] mb-4"
             />
             

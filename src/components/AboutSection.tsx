@@ -4,7 +4,7 @@ import { Plus, ArrowUpRight, Instagram, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const aboutImage =
-  "https://framerusercontent.com/images/mgRdbBZJGPn94ft58M4tL0u810.jpg?scale-down-to=4096";
+  "https://framerusercontent.com/images/mgRdbBZJGPn94ft58M4tL0u810.jpg?scale-down-to=1024";
 
 const socials = [
   {
@@ -85,6 +85,7 @@ const AboutSection = () => {
               className="w-full h-full object-cover transition-transform duration-500 ease-out"
               style={{ transform: open.length ? "scale(1.06)" : "scale(1)" }}
               loading="lazy"
+              decoding="async"
             />
 
             {/* SOCIAL BAR OVER IMAGE */}
