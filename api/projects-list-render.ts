@@ -37,21 +37,10 @@ const decodeHtmlEntities = (str: string): string =>
     .replace(/&#8220;/g, '"')
     .replace(/&#8221;/g, '"');
 
-const getArticleSection = (p: any): string => {
-  const schema = p.aioseo_head_json?.schema;
-  if (!schema) return "";
-  if (Array.isArray(schema["@graph"])) {
-    const article = schema["@graph"].find((n: any) => n["@type"] === "Article");
-    if (article?.articleSection) return article.articleSection as string;
-  }
-  if (typeof schema.articleSection === "string") return schema.articleSection;
-  return "";
-};
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const apiRes = await fetch(
-      `${WP_API}/project?per_page=6&page=1&status=publish&_embed=1`,
+      `${WP_API}/project?per_page=9&page=1&status=publish&_embed=1`,
       { signal: AbortSignal.timeout(8000) } // 8s timeout
     );
 
@@ -63,10 +52,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const normalizedProjects = rawProjects.map((p) => {
       const img = p._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? "https://kolacommunications.com/KolaFavicon.jpg";
-      const rawSection = getArticleSection(p);
-      const tags: string[] = rawSection
-        ? rawSection.split(",").map((t: string) => decodeHtmlEntities(t.trim())).filter(Boolean)
-        : (p.acf?.tags?.map(decodeHtmlEntities) ?? []);
+      const terms: any[] = (p._embedded?.["wp:term"] ?? []).flat();
+      const toItem = (t: any) => ({ id: t.id, name: decodeHtmlEntities(t.name), slug: t.slug, taxonomy: t.taxonomy });
+      const categories = terms.filter((t) => t.taxonomy === "project-category").map(toItem);
+      const tags = terms.filter((t) => t.taxonomy === "project-tag").map(toItem);
 
       return {
         id: p.id,
@@ -74,6 +63,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         title: decodeHtmlEntities(p.title.rendered),
         img,
         hoverImg: p.acf?.hover_img ?? img,
+        categories,
         tags,
         liveUrl: p.acf?.live_url ?? "",
       };

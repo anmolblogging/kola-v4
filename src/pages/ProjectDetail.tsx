@@ -78,6 +78,9 @@ const SERVICE_ORDER = [
   "website-development", "seo-aeo-geo", "ai-automation", "mobile-app-development", "performance-marketing",
   "lead-generation-conversion", "social-media-marketing", "content-creation-strategy", "brand-identity-design",
 ];
+// Tech-stack tags first (what the site is built on), then everything else
+const TECH_TAGS = ["wordpress", "woocommerce", "shopify", "custom-theme", "elementor", "next-js", "nuxt-js", "react-js", "node-js", "tailwind-css", "headless-cms", "custom-coded"];
+const tagRank = (slug: string) => { const i = TECH_TAGS.indexOf(slug); return i === -1 ? 99 : i; };
 const serviceRank = (slug: string) => { const i = SERVICE_ORDER.indexOf(slug); return i === -1 ? 99 : i; };
 
 /* Show grey placeholders where images will go while projects have none.
@@ -160,9 +163,10 @@ const CaseStudy = ({ project }: { project: WPProject }) => {
     .sort((x, y) => serviceRank(x.slug) - serviceRank(y.slug))
     .map((t) => decode(t.name));
   const heroImg = imgUrl(a.hero_image) || project._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "";
-  const gallery = [a.gallery_image_1, a.gallery_image_2, a.gallery_image_3, a.gallery_image_4]
-    .map((g) => (g && typeof g === "object" ? g : null))
-    .filter(Boolean) as { url: string; alt?: string }[];
+  const tags = terms
+    .filter((t) => t.taxonomy === "project-tag")
+    .sort((x, y) => tagRank(x.slug) - tagRank(y.slug))
+    .map((t) => ({ slug: t.slug, name: decode(t.name) }));
   const deliverables = lines(a.deliverables);
   const results = lines(a.results);
   const faqs = [1, 2, 3, 4, 5]
@@ -355,6 +359,24 @@ const CaseStudy = ({ project }: { project: WPProject }) => {
               </SectionRow>
             )}
 
+            {tags.length > 0 && (
+              <SectionRow label="Tags">
+                <h2 className="sr-only">Project tags</h2>
+                <ul className="flex flex-wrap gap-2 max-w-[900px]">
+                  {tags.map((t) => (
+                    <li key={t.slug}>
+                      <Link
+                        to={`/projects?tag=${encodeURIComponent(t.slug)}`}
+                        className="inline-flex items-center border border-black/10 bg-white px-3.5 py-1.5 text-[13px] text-black/70 hover:border-black/40 hover:text-black transition-colors"
+                      >
+                        {t.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </SectionRow>
+            )}
+
             {results.length > 0 && (
               <SectionRow label="Results">
                 <h2 className="sr-only">Results</h2>
@@ -363,20 +385,6 @@ const CaseStudy = ({ project }: { project: WPProject }) => {
                     <li key={r} className="bg-black text-white p-6 md:p-8 text-[20px] md:text-[24px] font-semibold leading-snug tracking-[-0.01em]">{r}</li>
                   ))}
                 </ul>
-              </SectionRow>
-            )}
-
-            {(gallery.length > 0 || SHOW_IMAGE_PLACEHOLDERS) && (
-              <SectionRow label="Gallery">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {gallery.length > 0
-                    ? gallery.map((g, i) => (
-                        <img key={g.url} src={g.url} alt={g.alt || `${name} screen ${i + 1}`} loading="lazy" className="w-full h-auto border border-border" />
-                      ))
-                    : [1, 2, 3, 4].map((n) => (
-                        <ImagePlaceholder key={n} label={`Gallery image ${n}`} size="Page or mobile screenshot · 1200 × 900" className="aspect-[4/3] w-full border border-border" />
-                      ))}
-                </div>
               </SectionRow>
             )}
 

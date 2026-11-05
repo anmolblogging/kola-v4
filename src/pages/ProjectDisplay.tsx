@@ -28,7 +28,7 @@ import { setCachedSlugType } from "./SlugResolver";
 ══════════════════════════════════════════ */
 
 const WP_API_BASE = "https://cms.kolacommunications.com/wp-json/wp/v2";
-const PER_PAGE = 6;
+const PER_PAGE = 9;
 
 /* ══════════════════════════════════════════
    TYPES
@@ -278,7 +278,11 @@ const useProjects = (
       !tagSlug
     ) {
       return {
-        projects: (window as any).__INITIAL_DATA__.projects.projects,
+        projects: ((window as any).__INITIAL_DATA__.projects.projects as NormalizedProject[]).map((p) => ({
+          ...p,
+          categories: Array.isArray(p.categories) ? p.categories : [],
+          tags: Array.isArray(p.tags) ? p.tags.filter((t) => t && typeof t === "object") : [],
+        })),
         loading: false,
         totalPages: (window as any).__INITIAL_DATA__.projects.totalPages,
         totalItems: (window as any).__INITIAL_DATA__.projects.totalItems,
@@ -390,36 +394,6 @@ const GlitchOverlay = memo(() => (
     ))}
   </motion.div>
 ));
-
-/* ══════════════════════════════════════════
-   PROJECT CARD ROW
-══════════════════════════════════════════ */
-
-interface ProjectCardRowProps {
-  pair: NormalizedProject[];
-  rowIndex: number;
-  onCategoryClick: (slug: string) => void;
-  onTagClick: (slug: string) => void;
-}
-
-const ProjectCardRow = memo(({ pair, rowIndex, onCategoryClick, onTagClick }: ProjectCardRowProps) => {
-  return (
-    <div
-      className="grid grid-cols-2 gap-3 sm:gap-4 items-stretch"
-      style={{ gridTemplateRows: "auto" }}
-    >
-      {pair.map((project, i) => (
-        <ProjectCardSubgrid
-          key={project.slug}
-          project={project}
-          index={rowIndex * 2 + i}
-          onCategoryClick={onCategoryClick}
-          onTagClick={onTagClick}
-        />
-      ))}
-    </div>
-  );
-});
 
 /* ══════════════════════════════════════════
    PROJECT CARD SUBGRID
@@ -1019,12 +993,6 @@ const ProjectDisplay = () => {
 
   const gridKey = `${activeCategorySlug ?? ""}-${activeTagSlug ?? ""}-${page}`;
 
-  // Chunk projects into pairs for row-level subgrid alignment
-  const projectRows = Array.from(
-    { length: Math.ceil(projects.length / 2) },
-    (_, i) => projects.slice(i * 2, i * 2 + 2)
-  );
-
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
@@ -1146,7 +1114,7 @@ const ProjectDisplay = () => {
                 className="flex flex-col gap-4"
               >
                 {loading ? (
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     {Array.from({ length: PER_PAGE }).map((_, i) => (
                       <SkeletonCard key={i} index={i} />
                     ))}
@@ -1162,15 +1130,17 @@ const ProjectDisplay = () => {
                     />
                   </div>
                 ) : (
-                  projectRows.map((pair, rowIdx) => (
-                    <ProjectCardRow
-                      key={rowIdx}
-                      pair={pair}
-                      rowIndex={rowIdx}
-                      onCategoryClick={handleCategorySelect}
-                      onTagClick={handleTagSelect}
-                    />
-                  ))
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 items-stretch">
+                    {projects.map((project, i) => (
+                      <ProjectCardSubgrid
+                        key={project.slug}
+                        project={project}
+                        index={i}
+                        onCategoryClick={handleCategorySelect}
+                        onTagClick={handleTagSelect}
+                      />
+                    ))}
+                  </div>
                 )}
               </motion.div>
             </AnimatePresence>
