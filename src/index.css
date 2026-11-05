@@ -167,3 +167,11 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-hero-scroll-up, .animate-hero-scroll-down, .animate-hero-scroll-x { animation: none; }
 }
+
+/* Device mockups (hero) keep realistic rounded corners despite the square rule */
+.device-phone { border-radius: 22px !important; }
+.device-phone-screen { border-radius: 17px !important; }
+.device-laptop { border-radius: 14px 14px 0 0 !important; }
+.device-screen { border-radius: 4px !important; }
+.device-laptop-base { border-radius: 0 0 14px 14px !important; }
+@keyframes hero-progress { from { width: 0%; } to { width: 100%; } }

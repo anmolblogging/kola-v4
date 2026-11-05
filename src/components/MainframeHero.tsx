@@ -4,15 +4,17 @@ import { Link } from "react-router-dom";
 import ContactForm from "@/components/ContactForm";
 import HeroShowcase from "@/components/hero/HeroShowcase";
 import HeroResults from "@/components/hero/HeroResults";
+import { HeroBento, HeroDevices, HeroSpotlight, HeroPicker, HeroTrust } from "@/components/hero/HeroOptions";
 
 
 /* ─── High Performance 3D Hero Component ─── */
 const MainframeHero = () => {
   const [contactOpen, setContactOpen] = useState(false);
   // Preview switch while choosing a design: ?hero=b shows the results version
-  const [variant] = useState<"a" | "b">(() =>
-    typeof window !== "undefined" && new URLSearchParams(window.location.search).get("hero") === "b" ? "b" : "a"
-  );
+  const [variant] = useState<string>(() => {
+    const v = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("hero") : null;
+    return v && "abefghi".includes(v) ? v : "a";
+  });
 
   return (
     <>
@@ -75,7 +77,13 @@ const MainframeHero = () => {
 
             {/* ================= RIGHT: PROOF ================= */}
             <div className="relative">
-              {variant === "b" ? <HeroResults /> : <HeroShowcase />}
+              {variant === "b" ? <HeroResults />
+                : variant === "e" ? <HeroBento />
+                : variant === "f" ? <HeroDevices />
+                : variant === "g" ? <HeroSpotlight />
+                : variant === "h" ? <HeroPicker />
+                : variant === "i" ? <HeroTrust />
+                : <HeroShowcase />}
             </div>
           </div>
         </div>
