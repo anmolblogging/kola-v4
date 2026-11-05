@@ -40,7 +40,7 @@ const decodeHtmlEntities = (str: string): string =>
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const apiRes = await fetch(
-      `${WP_API}/project?per_page=9&page=1&status=publish&_embed=1`,
+      `${WP_API}/project?per_page=8&page=1&status=publish&_embed=1`,
       { signal: AbortSignal.timeout(8000) } // 8s timeout
     );
 

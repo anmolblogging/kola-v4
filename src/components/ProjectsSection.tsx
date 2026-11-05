@@ -333,7 +333,7 @@ const ProjectsSection = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6"
+          className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6"
         >
           {loading
             ? Array.from({ length: PER_PAGE }).map((_, i) => (
