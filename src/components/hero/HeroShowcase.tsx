@@ -37,7 +37,8 @@ const BrowserCard = ({ work, eager = false }: { work: Work; eager?: boolean }) =
         alt={`${work.name} website designed and built by Kola Communications`}
         width={960}
         height={600}
-        loading={eager ? "eager" : "lazy"}
+        loading="eager"
+        fetchPriority={eager ? "high" : "auto"}
         decoding="async"
         className="w-full h-full object-cover object-top transition-transform duration-700 group-hover/card:scale-[1.03]"
       />
