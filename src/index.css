@@ -156,3 +156,14 @@
 .keep-round {
   border-radius: 9999px !important;
 }
+
+/* ── Hero showcase marquees ── */
+@keyframes hero-scroll-up   { from { transform: translateY(0); } to { transform: translateY(calc(-50% - 0.5rem)); } }
+@keyframes hero-scroll-down { from { transform: translateY(calc(-50% - 0.5rem)); } to { transform: translateY(0); } }
+@keyframes hero-scroll-x    { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 0.375rem)); } }
+.animate-hero-scroll-up   { animation: hero-scroll-up 38s linear infinite; }
+.animate-hero-scroll-down { animation: hero-scroll-down 38s linear infinite; }
+.animate-hero-scroll-x    { animation: hero-scroll-x 32s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-scroll-up, .animate-hero-scroll-down, .animate-hero-scroll-x { animation: none; }
+}

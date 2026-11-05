@@ -1,64 +1,18 @@
-import { useState, useRef, memo, useEffect } from "react";
-import { ArrowUpRight, Megaphone, Star, Sparkles, ArrowRight } from "lucide-react";
+import { useState, memo } from "react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import ContactForm from "@/components/ContactForm";
+import HeroShowcase from "@/components/hero/HeroShowcase";
+import HeroResults from "@/components/hero/HeroResults";
 
-const SPLINE_SCENE = "https://prod.spline.design/zyP-FoNAy1RNLOZx/scene.splinecode";
-
-/* ─── Client Avatars with optimized image dimensions ─── */
-const clientAvatars = [
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&auto=format&fit=crop&q=80",
-];
 
 /* ─── High Performance 3D Hero Component ─── */
 const MainframeHero = () => {
   const [contactOpen, setContactOpen] = useState(false);
-  const [is3DLoaded, setIs3DLoaded] = useState(false);
-  const splineRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = splineRef.current;
-    if (!el) return;
-
-    // Clean spline logo watermark cleanly
-    const cleanupBadge = () => {
-      const root = (el as any)?.shadowRoot as ShadowRoot | undefined;
-      const badge = root?.querySelector("#logo");
-      if (badge) {
-        badge.remove();
-        setIs3DLoaded(true);
-        return true;
-      }
-      return false;
-    };
-
-    if (cleanupBadge()) return;
-
-    const observer = new MutationObserver(() => {
-      if (cleanupBadge()) {
-        observer.disconnect();
-      }
-    });
-
-    if ((el as any)?.shadowRoot) {
-      observer.observe((el as any).shadowRoot, { childList: true, subtree: true });
-    }
-
-    const timer = setTimeout(() => {
-      cleanupBadge();
-      setIs3DLoaded(true);
-      observer.disconnect();
-    }, 2500);
-
-    return () => {
-      observer.disconnect();
-      clearTimeout(timer);
-    };
-  }, []);
+  // Preview switch while choosing a design: ?hero=b shows the results version
+  const [variant] = useState<"a" | "b">(() =>
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).get("hero") === "b" ? "b" : "a"
+  );
 
   return (
     <>
@@ -119,24 +73,9 @@ const MainframeHero = () => {
 
             </div>
 
-            {/* ================= RIGHT: HIGH-PERFORMANCE 3D STAGE ================= */}
-            <div className="relative h-[320px] sm:h-[420px] md:h-[460px] lg:h-[500px] rounded-3xl overflow-hidden bg-gradient-to-b from-[#F3F4F6] to-[#E5E7EB] border border-black/10 shadow-[0_12px_36px_rgba(0,0,0,0.04)] group">
-              <spline-viewer
-                ref={splineRef}
-                url={SPLINE_SCENE}
-                className={`w-full h-full block pointer-events-none transition-opacity duration-500 ${
-                  is3DLoaded ? "opacity-100" : "opacity-95"
-                }`}
-              />
-
-              {/* Bottom Interactive HUD Tag */}
-              <div className="absolute bottom-3 md:bottom-4 left-3 md:left-4 right-3 md:right-4 z-10 px-3.5 md:px-4 py-2 md:py-2.5 rounded-2xl bg-white/85 backdrop-blur-md border border-black/10 flex items-center justify-between text-xs text-black/70 shadow-sm">
-                <span className="font-medium flex items-center gap-1.5 text-[11px] md:text-xs">
-                  <Sparkles size={12} className="text-black/60" />
-                  Kola 3D Studio Lab
-                </span>
-                <span className="text-[10px] md:text-[11px] text-black/40">Interactive 3D Stage</span>
-              </div>
+            {/* ================= RIGHT: PROOF ================= */}
+            <div className="relative">
+              {variant === "b" ? <HeroResults /> : <HeroShowcase />}
             </div>
           </div>
         </div>
