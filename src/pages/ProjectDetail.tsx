@@ -359,24 +359,6 @@ const CaseStudy = ({ project }: { project: WPProject }) => {
               </SectionRow>
             )}
 
-            {tags.length > 0 && (
-              <SectionRow label="Tags">
-                <h2 className="sr-only">Project tags</h2>
-                <ul className="flex flex-wrap gap-2 max-w-[900px]">
-                  {tags.map((t) => (
-                    <li key={t.slug}>
-                      <Link
-                        to={`/projects?tag=${encodeURIComponent(t.slug)}`}
-                        className="inline-flex items-center border border-black/10 bg-white px-3.5 py-1.5 text-[13px] text-black/70 hover:border-black/40 hover:text-black transition-colors"
-                      >
-                        {t.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </SectionRow>
-            )}
-
             {results.length > 0 && (
               <SectionRow label="Results">
                 <h2 className="sr-only">Results</h2>
@@ -392,6 +374,24 @@ const CaseStudy = ({ project }: { project: WPProject }) => {
               <SectionRow label="FAQs" id="faqs">
                 <h2 className="sr-only">Frequently asked questions</h2>
                 <Faq items={faqs} />
+              </SectionRow>
+            )}
+
+            {tags.length > 0 && (
+              <SectionRow label="Tags">
+                <h2 className="sr-only">Project tags</h2>
+                <ul className="flex flex-wrap gap-2 max-w-[900px]">
+                  {tags.map((t) => (
+                    <li key={t.slug}>
+                      <Link
+                        to={`/projects?tag=${encodeURIComponent(t.slug)}`}
+                        className="inline-flex items-center border border-black/10 bg-white px-3.5 py-1.5 text-[13px] text-black/70 hover:border-black/40 hover:text-black transition-colors"
+                      >
+                        {t.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </SectionRow>
             )}
           </div>

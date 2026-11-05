@@ -28,7 +28,7 @@ import { setCachedSlugType } from "./SlugResolver";
 ══════════════════════════════════════════ */
 
 const WP_API_BASE = "https://cms.kolacommunications.com/wp-json/wp/v2";
-const PER_PAGE = 9;
+const PER_PAGE = 8;
 
 /* ══════════════════════════════════════════
    TYPES
@@ -1114,7 +1114,7 @@ const ProjectDisplay = () => {
                 className="flex flex-col gap-4"
               >
                 {loading ? (
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     {Array.from({ length: PER_PAGE }).map((_, i) => (
                       <SkeletonCard key={i} index={i} />
                     ))}
@@ -1130,7 +1130,7 @@ const ProjectDisplay = () => {
                     />
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 items-stretch">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 items-stretch">
                     {projects.map((project, i) => (
                       <ProjectCardSubgrid
                         key={project.slug}
