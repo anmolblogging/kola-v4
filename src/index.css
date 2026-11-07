@@ -156,3 +156,7 @@
 .keep-round {
   border-radius: 9999px !important;
 }
+
+/* Horizontal chip rows: scroll without a visible scrollbar */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

@@ -429,14 +429,14 @@ const ProjectCardSubgrid = memo(({ project, index, onCategoryClick, onTagClick }
           {/* TITLE */}
           <Link
             to={`/${project.slug}`}
-            className="text-[13px] sm:text-[15px] text-black font-medium leading-snug block hover:text-black/70 transition-colors line-clamp-1 sm:line-clamp-none"
+            className="text-[13px] sm:text-[15px] text-black font-medium leading-snug block hover:text-black/70 transition-colors truncate"
           >
             {project.title}
           </Link>
 
           {/* CATEGORY BADGES */}
           {project.categories.length > 0 && (
-            <div className="flex gap-1 sm:gap-1.5 mt-1 sm:mt-2 flex-wrap">
+            <div className="no-scrollbar flex flex-nowrap gap-1 sm:gap-1.5 mt-1 sm:mt-2 overflow-x-auto">
               {project.categories.map((cat) => (
                 <button
                   key={`${cat.taxonomy || "cat"}-${cat.slug}`}
@@ -446,7 +446,7 @@ const ProjectCardSubgrid = memo(({ project, index, onCategoryClick, onTagClick }
                     e.stopPropagation();
                     onCategoryClick(cat.slug);
                   }}
-                  className="text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-0.5 text-black/50 border border-black/10 whitespace-nowrap leading-snug hover:border-black/30 hover:text-black transition-colors duration-150 rounded-xl cursor-pointer truncate max-w-full sm:max-w-none"
+                  className="text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-0.5 text-black/50 border border-black/10 whitespace-nowrap leading-snug hover:border-black/30 hover:text-black transition-colors duration-150 rounded-xl cursor-pointer shrink-0"
                 >
                   {cat.name}
                 </button>

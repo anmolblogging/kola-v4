@@ -6,7 +6,7 @@ import { setCachedSlugType } from "@/pages/SlugResolver";
 
 const WP_API_BASE = "https://cms.kolacommunications.com/wp-json/wp/v2";
 // Homepage shows these flagship clients, in this order.
-const FEATURED_SLUGS = ["roy-infra-developers", "laser-technologies", "livyor", "dhanuka-investments"];
+const FEATURED_SLUGS = ["roy-infra-developers", "laser-technologies", "livyor", "dhanuka-investments", "tazaari", "arsenal-core"];
 const PER_PAGE = FEATURED_SLUGS.length;
 
 /* ─── Types ─── */
@@ -236,17 +236,17 @@ const ProjectCard = ({
         {/* Header — the card leads with its name, not with the picture */}
         <div className="p-3 sm:px-5 sm:pt-4 sm:pb-4 flex items-center justify-between gap-2 sm:gap-4">
           <div className="min-w-0">
-            <h3 className="text-[13px] sm:text-[16px] md:text-[17px] font-semibold leading-tight tracking-[-0.01em] text-foreground mb-1 sm:mb-2 line-clamp-1 sm:line-clamp-none">
+            <h3 className="text-[13px] sm:text-[16px] md:text-[17px] font-semibold leading-tight tracking-[-0.01em] text-foreground mb-1 sm:mb-2 truncate">
               {project.title}
             </h3>
 
             {project.categories.length > 0 && (
-              <div className="flex flex-wrap gap-1 sm:gap-1.5">
+              <div className="no-scrollbar flex flex-nowrap gap-1 sm:gap-1.5 overflow-x-auto">
                 {project.categories.slice(0, 3).map((cat) => (
                   <span
                     key={`${cat.taxonomy || "cat"}-${cat.slug}`}
                     data-slug={cat.slug}
-                    className="text-[10px] sm:text-[11.5px] font-normal px-2 py-[2px] sm:px-2.5 sm:py-[4px] whitespace-nowrap border border-border text-foreground/75 bg-background rounded-xl truncate max-w-full sm:max-w-none"
+                    className="text-[10px] sm:text-[11.5px] font-normal px-2 py-[2px] sm:px-2.5 sm:py-[4px] shrink-0 whitespace-nowrap border border-border text-foreground/75 bg-background rounded-xl"
                   >
                     {cat.name}
                   </span>
@@ -336,7 +336,7 @@ const ProjectsSection = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6"
+          className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6"
         >
           {loading
             ? Array.from({ length: PER_PAGE }).map((_, i) => (
