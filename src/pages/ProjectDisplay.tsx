@@ -484,7 +484,7 @@ const ProjectCardSubgrid = memo(({ project, index, onCategoryClick, onTagClick }
         style={{ textDecoration: "none" }}
         className="mt-auto block flex-1"
       >
-        <div className="relative w-full h-[140px] sm:h-[180px] md:h-[220px] overflow-hidden">
+        <div className="relative w-full aspect-[3/2] overflow-hidden">
           <motion.img
             src={project.img}
             alt={project.title}
@@ -532,7 +532,7 @@ const SkeletonCard = memo(({ index }: { index: number }) => (
         ))}
       </div>
     </div>
-    <div className="h-[140px] sm:h-[180px] md:h-[220px] bg-black/[0.04] animate-pulse" />
+    <div className="aspect-[3/2] bg-black/[0.04] animate-pulse" />
   </motion.div>
 ));
 
