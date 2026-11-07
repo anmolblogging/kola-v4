@@ -290,17 +290,11 @@ const CaseStudy = ({ project }: { project: WPProject }) => {
             </div>
 
             {(heroImg || SHOW_IMAGE_PLACEHOLDERS) && (
-              <figure className="border border-border bg-white shadow-[0_16px_48px_rgba(0,0,0,0.06)]">
-                <div className="flex items-center gap-1.5 px-3.5 h-8 border-b border-border bg-[#fafafa]">
-                  <span className="keep-round w-2 h-2 bg-black/15" />
-                  <span className="keep-round w-2 h-2 bg-black/15" />
-                  <span className="keep-round w-2 h-2 bg-black/15" />
-                  {site && <span className="ml-2.5 text-[11px] text-black/40 truncate">{site}</span>}
-                </div>
+              <figure className="border border-border bg-white">
                 {heroImg ? (
-                  <img src={heroImg} alt={`${name} website designed by Kola Communications`} className="w-full aspect-[16/10] object-cover object-top block" />
+                  <img src={heroImg} alt={`${name} website designed by Kola Communications`} className="w-full aspect-[3/2] object-cover block" />
                 ) : (
-                  <ImagePlaceholder label="Featured image" size="Website screenshot · 1600 × 1000" className="aspect-[16/10] w-full" />
+                  <ImagePlaceholder label="Featured image" size="1536 × 1024" className="aspect-[3/2] w-full" />
                 )}
               </figure>
             )}
@@ -429,7 +423,7 @@ const CaseStudy = ({ project }: { project: WPProject }) => {
                   return (
                     <li key={p.id} className="bg-white">
                       <Link to={`/${p.slug}`} className="group flex flex-col h-full p-6 md:p-7 hover:bg-black/[0.02] transition-colors">
-                        {img && <img src={img} alt={pname} loading="lazy" className="aspect-[16/10] w-full object-cover object-top border border-border mb-5" />}
+                        {img && <img src={img} alt={pname} loading="lazy" className="aspect-[3/2] w-full object-cover border border-border mb-5" />}
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <h3 className="text-[17px] font-semibold mb-1">{pname}</h3>

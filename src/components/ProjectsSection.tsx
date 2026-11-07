@@ -5,7 +5,9 @@ import { ArrowUpRight } from "lucide-react";
 import { setCachedSlugType } from "@/pages/SlugResolver";
 
 const WP_API_BASE = "https://cms.kolacommunications.com/wp-json/wp/v2";
-const PER_PAGE = 6; // latest projects shown on the homepage
+// Homepage shows these flagship clients, in this order.
+const FEATURED_SLUGS = ["roy-infra-developers", "laser-technologies", "livyor", "dhanuka-investments"];
+const PER_PAGE = FEATURED_SLUGS.length;
 
 /* ─── Types ─── */
 export interface ProjectTaxonomyItem {
@@ -264,7 +266,7 @@ const ProjectCard = ({
         </div>
 
         {/* Media — full bleed under the header, no scrim over it */}
-        <div className="relative aspect-[4/3] md:aspect-[16/9] overflow-hidden">
+        <div className="relative aspect-[3/2] overflow-hidden">
           <motion.img
             src={project.img}
             alt={project.title}
@@ -306,12 +308,13 @@ const ProjectsSection = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `${WP_API_BASE}/project?per_page=${PER_PAGE}&_embed=1`
+          `${WP_API_BASE}/project?slug=${FEATURED_SLUGS.join(",")}&per_page=${PER_PAGE}&_embed=1`
         );
         if (!res.ok) throw new Error("Failed to fetch");
         if (cancelled) return;
         const data: WPProject[] = await res.json();
-        if (!cancelled) setProjects(data.map(normalize));
+        const rank = (slug: string) => FEATURED_SLUGS.indexOf(slug);
+        if (!cancelled) setProjects([...data].sort((a, b) => rank(a.slug) - rank(b.slug)).map(normalize));
       } catch (err) {
         console.error("Error fetching projects:", err);
       } finally {
@@ -349,7 +352,7 @@ const ProjectsSection = () => {
                       <div className="h-5 sm:h-7 w-12 sm:w-24 bg-black/5 rounded-full" />
                     </div>
                   </div>
-                  <div className="bg-black/5 aspect-[4/3] md:aspect-[16/9]" />
+                  <div className="bg-black/5 aspect-[3/2]" />
                 </div>
               ))
             : projects.map((p, i) => (
